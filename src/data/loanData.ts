@@ -37,7 +37,7 @@ export const loanData: LoanData[] = [
     interestPaid: 0,
   },
   {
-    borrower: "Ravi",
+    borrower: "Ravi (Amma)",
     loanAmt: 200000,
     loanTakenDate: new Date(2023, 5, 1),
     roi: 15,
