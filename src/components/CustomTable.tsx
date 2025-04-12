@@ -10,6 +10,7 @@ import { loanData } from "../data/loanData";
 import {
   calculateAccumulatedInterest,
   calculateMonthlyInterest,
+  getTimeElapsed,
 } from "../utils/helper";
 
 export default function CustomTable() {
@@ -27,6 +28,7 @@ export default function CustomTable() {
             <TableCell>Name</TableCell>
             <TableCell align="right">Loan Amount</TableCell>
             <TableCell align="right">Loan Taken Date</TableCell>
+            <TableCell align="right">Total Time Elapsed</TableCell>
             <TableCell align="right">R O I</TableCell>
             <TableCell align="right">Monthly Interest</TableCell>
             <TableCell align="right">Total Interest</TableCell>
@@ -68,6 +70,9 @@ export default function CustomTable() {
                 <TableCell align="right">
                   {row.loanTakenDate.toDateString()}
                 </TableCell>
+                <TableCell align="right">
+                  {getTimeElapsed(row.loanTakenDate)}
+                </TableCell>
                 <TableCell align="right">{row.roi}</TableCell>
                 <TableCell align="right">
                   {monthlyInterest.toFixed(2)}
@@ -90,6 +95,7 @@ export default function CustomTable() {
             <TableCell align="right">{totalPrincipalAccumulated}</TableCell>
             <TableCell></TableCell>
             <TableCell></TableCell>
+            <TableCell align="right"></TableCell>
             <TableCell align="right">
               {monthlyInterestAccumulated.toFixed(2)}
             </TableCell>
