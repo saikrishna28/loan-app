@@ -54,7 +54,13 @@ const Header: React.FC<HeaderProps> = ({ title, username }) => {
                 </span>
                 <div
                   style={{ cursor: "pointer" }}
-                  onClick={() => navigate("/", { state: { username } })}
+                  onClick={() => {
+                    if (window.confirm("Are you sure you want to log out?")) {
+                      navigate("/", { state: { username } });
+                      localStorage.removeItem("isAuthenticated");
+                      localStorage.removeItem("username");
+                    }
+                  }}
                 >
                   <BiPowerOff />
                 </div>

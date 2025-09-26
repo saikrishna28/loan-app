@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 
 export default function HomePage() {
   const location = useLocation();
-  const username = location.state?.userName || "";
+  const username = localStorage.getItem("username") || "";
   return (
     <>
       <Header title="Loan Details" username={username} />

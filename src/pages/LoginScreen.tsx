@@ -18,7 +18,9 @@ const LoginScreen: React.FC = () => {
     );
     if (loginUser) {
       console.log("Login successful");
-      navigate("/home", { state: { userName } });
+      localStorage.setItem("isAuthenticated", "true");
+      localStorage.setItem("username", userName);
+      navigate("/home");
     } else {
       console.log("Login failed");
       setError("Invalid username or password");
