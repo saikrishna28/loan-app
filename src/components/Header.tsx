@@ -53,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({ title, username }) => {
                   {username}
                 </span>
                 <div
-                  style={{ cursor: "pointer" }}
+                  style={{ cursor: "pointer", display: "flex" }}
                   onClick={() => {
                     if (window.confirm("Are you sure you want to log out?")) {
                       navigate("/", { state: { username } });

@@ -7,11 +7,14 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { loanData } from "../data/loanData";
+import { BiSpreadsheet } from "react-icons/bi";
+import { useNavigate } from "react-router-dom";
 import {
   calculateAccumulatedInterest,
   calculateMonthlyInterest,
   getTimeElapsed,
 } from "../utils/helper";
+import { ExtendedLoanData, LoanData } from "../model/LoanData";
 
 export default function CustomTable() {
   let totalPrincipalAccumulated: number = 0;
@@ -19,6 +22,12 @@ export default function CustomTable() {
   let totalInterestAccumulated: number = 0;
   let totalPendingInterest: number = 0;
   let totalAmountAccumulated: number = 0;
+  let extendedLoanData: ExtendedLoanData[] = [...loanData];
+  const navigate = useNavigate();
+
+  const showDetails = (row: ExtendedLoanData) => {
+    navigate("/details", { state: row });
+  };
 
   return (
     <TableContainer component={Paper}>
@@ -38,7 +47,7 @@ export default function CustomTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {loanData.map((row) => {
+          {extendedLoanData.map((row) => {
             const monthlyInterest = calculateMonthlyInterest(
               row.loanAmt,
               row.roi,
@@ -58,13 +67,30 @@ export default function CustomTable() {
             monthlyInterestAccumulated += monthlyInterest;
             totalInterestAccumulated += totalInterest;
             totalAmountAccumulated += totalAmount;
+            row.monthlyInterest = monthlyInterest;
+            row.totalInterest = totalInterest;
+            row.interestPending = interestPending;
+            row.totalPending = totalAmount;
             return (
               <TableRow
                 key={row.borrower}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell
+                  component="th"
+                  scope="row"
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                  }}
+                >
                   {row.borrower}
+                  <BiSpreadsheet
+                    style={{ fontSize: "x-large" }}
+                    onClick={() => showDetails(row)}
+                  />
                 </TableCell>
                 <TableCell align="right">{row.loanAmt}</TableCell>
                 <TableCell align="right">

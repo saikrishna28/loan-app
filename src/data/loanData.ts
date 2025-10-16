@@ -7,6 +7,7 @@ export const loanData: LoanData[] = [
     loanTakenDate: new Date(2024, 7, 16),
     roi: 18,
     interestPaid: 46000,
+    lender: "Sai",
   },
   {
     borrower: "Venky (Chinna)",
@@ -14,6 +15,7 @@ export const loanData: LoanData[] = [
     loanTakenDate: new Date(2024, 5, 23),
     roi: 18,
     interestPaid: 41000,
+    lender: "Chinna",
   },
   {
     borrower: "Anvesh",
@@ -21,6 +23,7 @@ export const loanData: LoanData[] = [
     loanTakenDate: new Date(2024, 9, 20),
     roi: 18,
     interestPaid: 36000,
+    lender: "Sai",
   },
   {
     borrower: "S.S. Rao",
@@ -28,6 +31,7 @@ export const loanData: LoanData[] = [
     loanTakenDate: new Date(2024, 8, 1),
     roi: 15.6,
     interestPaid: 156000,
+    lender: "Sai",
   },
   {
     borrower: "Ravi",
@@ -35,6 +39,7 @@ export const loanData: LoanData[] = [
     loanTakenDate: new Date(2023, 6, 1),
     roi: 15,
     interestPaid: 0,
+    lender: "Sai",
   },
   {
     borrower: "Ravi (Amma)",
@@ -42,6 +47,7 @@ export const loanData: LoanData[] = [
     loanTakenDate: new Date(2023, 6, 1),
     roi: 15,
     interestPaid: 0,
+    lender: "Amma",
   },
   {
     borrower: "Hanu Thatha",
@@ -49,6 +55,7 @@ export const loanData: LoanData[] = [
     loanTakenDate: new Date(2023, 10, 1),
     roi: 12,
     interestPaid: 0,
+    lender: "Sai",
   },
   {
     borrower: "Mohan Thatha (Reshma)",
@@ -56,6 +63,7 @@ export const loanData: LoanData[] = [
     loanTakenDate: new Date(2023, 11, 17),
     roi: 12,
     interestPaid: 0,
+    lender: "Reshma",
   },
   {
     borrower: "Mohan Thatha",
@@ -63,6 +71,7 @@ export const loanData: LoanData[] = [
     loanTakenDate: new Date(2023, 11, 19),
     roi: 12,
     interestPaid: 0,
+    lender: "Sai",
   },
   {
     borrower: "Chennai (Hanu) Thatha (Reshma)",
@@ -70,6 +79,7 @@ export const loanData: LoanData[] = [
     loanTakenDate: new Date(2024, 5, 19),
     roi: 12,
     interestPaid: 0,
+    lender: "Reshma",
   },
   {
     borrower: "Chennai (Mohan) Thatha (Reshma)",
@@ -77,5 +87,6 @@ export const loanData: LoanData[] = [
     loanTakenDate: new Date(2024, 5, 20),
     roi: 12,
     interestPaid: 0,
+    lender: "Reshma",
   },
 ];

@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import LoginScreen from "./pages/LoginScreen";
 import PublicRoute from "./routes/PublicRoute";
 import PrivateRoute from "./routes/PrivateRoute";
+import ShowDetails from "./pages/ShowDetails";
 
 function App() {
   return (
@@ -15,6 +16,14 @@ function App() {
             element={
               <PrivateRoute>
                 <HomePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/details"
+            element={
+              <PrivateRoute>
+                <ShowDetails />
               </PrivateRoute>
             }
           />
