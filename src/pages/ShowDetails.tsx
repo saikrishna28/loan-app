@@ -10,16 +10,21 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateField } from "@mui/x-date-pickers/DateField";
 import { Button } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers";
+import FormGroup from "@mui/material/FormGroup";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 
 export default function ShowDetails() {
   const location = useLocation();
   const extLoanData = location.state as ExtendedLoanData | undefined;
-  //   const [fromDate, setFromDate] = useState<Dayjs | null>(dayjs("2022-04-17"));
+  const [compoundingValue, setCompoundingValue] = useState(0);
+  const [compoundingDaily, setCompoundingDaily] = useState(false);
   const [fromDate, setFromDate] = useState<Dayjs | null>(
     dayjs(extLoanData?.loanTakenDate)
   );
   const [toDate, setToDate] = useState<Dayjs | null>(dayjs());
   const [totalPayable, setTotalPayable] = useState<number>(0);
+  const [totalCompPayable, setTotalCompPayable] = useState<number>(0);
   if (!extLoanData) {
     return <div>No data available</div>;
   }
@@ -54,19 +59,27 @@ export default function ShowDetails() {
 
   const calculateLoan = () => {
     if (!!fromDate && !!toDate) {
-      const currentDate = new Date();
       const timeDifferenceInMonths = toDate.diff(fromDate, "month", true); // fractional months
       const timeDifferenceInDays = toDate.diff(fromDate, "days", true); // fractional months
-      //   const monthsWhole = Math.floor(timeDifference);
-      console.log(
-        "Months (fractional):",
-        timeDifferenceInMonths,
-        "Days (fractional):",
-        timeDifferenceInDays
-      );
       const totalInMonths =
         (extLoanData.loanAmt * extLoanData.roi * timeDifferenceInMonths) / 1200;
       setTotalPayable(totalInMonths);
+      if (compoundingDaily) {
+        const r = extLoanData.roi / 100;
+        const P = extLoanData.loanAmt;
+        const t = timeDifferenceInDays / 365;
+        const compoundedAmount = P * Math.pow(1 + r / 365, 365 * t);
+        setTotalCompPayable(compoundedAmount - P);
+        return;
+      }
+      if (compoundingValue > 0) {
+        const n = 12 / compoundingValue;
+        const r = extLoanData.roi / 100;
+        const P = extLoanData.loanAmt;
+        const t = timeDifferenceInDays / 365;
+        const compoundedAmount = P * Math.pow(1 + r / n, n * t);
+        setTotalCompPayable(compoundedAmount - P);
+      }
     } else {
       alert("Please select both From Date and To Date");
     }
@@ -130,6 +143,41 @@ export default function ShowDetails() {
         <div>
           <span style={{ fontSize: "large", fontWeight: "bold" }}>
             Total Payable is : ₹ {totalPayable.toFixed(2)}
+          </span>
+        </div>
+      )}
+      <br />
+      <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+        <TextField
+          label="Coumpounding for every n months"
+          type="number"
+          disabled={compoundingDaily}
+          value={compoundingValue}
+          onChange={(e) => setCompoundingValue(Number(e.target.value))}
+        />
+        <FormGroup>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={compoundingDaily}
+                onChange={(e) => {
+                  setCompoundingDaily(e.target.checked);
+                  setTotalCompPayable(0);
+                  if (e.target.checked) {
+                    setCompoundingValue(0);
+                  }
+                }}
+              />
+            }
+            label="Coumpound daily"
+            onChange={(e) => console.log(e.target)}
+          />
+        </FormGroup>
+      </div>
+      {totalCompPayable !== 0 && (
+        <div>
+          <span style={{ fontSize: "large", fontWeight: "bold" }}>
+            Total Payable is : ₹ {totalCompPayable.toFixed(2)}
           </span>
         </div>
       )}
