@@ -57,7 +57,7 @@ export default function CustomTable() {
     updatedExtendedLoanData.push(row);
     return (
       <TableRow
-        key={row.borrower}
+        key={row.borrower + row.loanTakenDate.toDateString()}
         sx={{
           "&:last-child td, &:last-child th": { border: 0 },
           "&:nth-of-type(even)": { backgroundColor: "#f5f5f5" },
@@ -85,7 +85,7 @@ export default function CustomTable() {
         <TableCell align="right">{row.roi}</TableCell>
         <TableCell align="right">{monthlyInterest.toFixed(2)}</TableCell>
         <TableCell align="right">
-          {row.borrower.includes("Chinna")
+          {row.lender === "Chinna"
             ? (totalInterest - 1000).toFixed(2)
             : totalInterest.toFixed(2)}
         </TableCell>
@@ -206,7 +206,23 @@ export default function CustomTable() {
                               },
                             }}
                           >
-                            <TableCell>{loan.borrower}</TableCell>
+                            <TableCell>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <span style={{ cursor: "pointer" }}>
+                                  {loan.borrower}
+                                </span>
+                                <BiSpreadsheet
+                                  style={{ fontSize: "x-large" }}
+                                  onClick={() => showDetails(loan)}
+                                />
+                              </div>
+                            </TableCell>
                             <TableCell align="right">{loan.loanAmt}</TableCell>
                             <TableCell align="right">
                               {loan.loanTakenDate.toDateString()}
