@@ -20,9 +20,10 @@ export default function ShowDetails() {
   const [compoundingValue, setCompoundingValue] = useState(0);
   const [compoundingDaily, setCompoundingDaily] = useState(false);
   const [fromDate, setFromDate] = useState<Dayjs | null>(
-    dayjs(extLoanData?.loanTakenDate)
+    dayjs(extLoanData?.loanTakenDate),
   );
   const [toDate, setToDate] = useState<Dayjs | null>(dayjs());
+  const [modifiedROI, setModifiedROI] = useState<number>(extLoanData?.roi || 0);
   const [totalPayable, setTotalPayable] = useState<number>(0);
   const [totalCompPayable, setTotalCompPayable] = useState<number>(0);
   if (!extLoanData) {
@@ -45,15 +46,15 @@ export default function ShowDetails() {
                 val == null
                   ? ""
                   : typeof val === "number"
-                  ? String(val.toFixed(2)) + ("roi" === key ? " %" : "")
-                  : String(key === "loanTakenDate" ? val.toDateString() : val)
+                    ? String(val.toFixed(2)) + ("roi" === key ? " %" : "")
+                    : String(key === "loanTakenDate" ? val.toDateString() : val)
               }
               fullWidth
             />
           </div>
         ))}
         {pair.length === 1 && <div style={{ flex: 1 }} />}
-      </div>
+      </div>,
     );
   }
 
@@ -62,10 +63,10 @@ export default function ShowDetails() {
       const timeDifferenceInMonths = toDate.diff(fromDate, "month", true); // fractional months
       const timeDifferenceInDays = toDate.diff(fromDate, "days", true); // fractional months
       const totalInMonths =
-        (extLoanData.loanAmt * extLoanData.roi * timeDifferenceInMonths) / 1200;
+        (extLoanData.loanAmt * modifiedROI * timeDifferenceInMonths) / 1200;
       setTotalPayable(totalInMonths);
       if (compoundingDaily) {
-        const r = extLoanData.roi / 100;
+        const r = modifiedROI / 100;
         const P = extLoanData.loanAmt;
         const t = timeDifferenceInDays / 365;
         const compoundedAmount = P * Math.pow(1 + r / 365, 365 * t);
@@ -74,7 +75,7 @@ export default function ShowDetails() {
       }
       if (compoundingValue > 0) {
         const n = 12 / compoundingValue;
-        const r = extLoanData.roi / 100;
+        const r = modifiedROI / 100;
         const P = extLoanData.loanAmt;
         const t = timeDifferenceInDays / 365;
         const compoundedAmount = P * Math.pow(1 + r / n, n * t);
@@ -133,6 +134,12 @@ export default function ShowDetails() {
               onChange={(newValue) => setToDate(newValue)}
             />
           </LocalizationProvider>
+          <TextField
+            label="ROI"
+            type="number"
+            value={modifiedROI}
+            onChange={(e) => setModifiedROI(Number(e.target.value))}
+          />
           <Button variant="contained" onClick={calculateLoan}>
             Calculate
           </Button>
