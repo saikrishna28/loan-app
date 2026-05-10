@@ -2,6 +2,7 @@ export interface LoanData {
   borrower: string;
   loanAmt: number;
   loanTakenDate: Date;
+  loanClosedDate?: Date;
   roi: number;
   interestPaid: number;
   lender: string;

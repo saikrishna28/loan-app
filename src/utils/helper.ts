@@ -1,7 +1,7 @@
 export function calculateMonthlyInterest(
   principal: number,
   annualRate: number,
-  startDate: Date
+  startDate: Date,
 ): number {
   return (principal * annualRate) / 1200;
 }
@@ -9,7 +9,7 @@ export function calculateMonthlyInterest(
 export function calculateTotalInterest(
   principal: number,
   annualRate: number,
-  startDate: Date
+  startDate: Date,
 ): number {
   const currentDate = new Date();
   const timeDifference = currentDate.getTime() - startDate.getTime();
@@ -34,10 +34,14 @@ export function getTimeElapsed(startDate: Date): string {
 export function calculateAccumulatedInterest(
   principal: number,
   annualRate: number,
-  startDate: Date
+  startDate: Date,
+  loanClosedDate: Date | undefined,
 ): number {
   const currentDate = new Date();
-  const timeDifference = currentDate.getTime() - startDate.getTime();
+  const timeDifference = !!loanClosedDate
+    ? loanClosedDate.getTime() - startDate.getTime()
+    : currentDate.getTime() - startDate.getTime();
+  console.log("Time Difference in ms:", timeDifference);
   const monthsElapsed = timeDifference / (1000 * 60 * 60 * 24 * 30.44); // Approximate months
   return (principal * annualRate * monthsElapsed) / 1200;
 }

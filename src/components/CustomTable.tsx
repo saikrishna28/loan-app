@@ -34,17 +34,20 @@ export default function CustomTable() {
     const monthlyInterest = calculateMonthlyInterest(
       row.loanAmt,
       row.roi,
-      row.loanTakenDate
+      row.loanTakenDate,
     );
     const totalInterest = calculateAccumulatedInterest(
       row.loanAmt,
       row.roi,
-      row.loanTakenDate
+      row.loanTakenDate,
+      row.loanClosedDate,
     );
     const interestPending = row.borrower.includes("Chinna")
       ? totalInterest - row.interestPaid - 1000
       : totalInterest - row.interestPaid;
-    const totalAmount = row.loanAmt + interestPending;
+    const totalAmount = !!row.loanClosedDate
+      ? interestPending
+      : row.loanAmt + interestPending;
     totalPendingInterest += interestPending;
     totalPrincipalAccumulated += row.loanAmt;
     monthlyInterestAccumulated += monthlyInterest;
@@ -81,6 +84,9 @@ export default function CustomTable() {
         </TableCell>
         <TableCell align="right">{row.loanAmt}</TableCell>
         <TableCell align="right">{row.loanTakenDate.toDateString()}</TableCell>
+        <TableCell align="right">
+          {row.loanClosedDate ? row.loanClosedDate.toDateString() : "N/A"}
+        </TableCell>
         <TableCell align="right">{getTimeElapsed(row.loanTakenDate)}</TableCell>
         <TableCell align="right">{row.roi}</TableCell>
         <TableCell align="right">{monthlyInterest.toFixed(2)}</TableCell>
@@ -105,7 +111,7 @@ export default function CustomTable() {
         acc[data.lender].push(data);
         return acc;
       },
-      {}
+      {},
     );
   console.log("Lenders Data:", lendersData);
   console.log("Object.entries(lendersData)", Object.entries(lendersData));
@@ -119,6 +125,7 @@ export default function CustomTable() {
               <TableCell>Name</TableCell>
               <TableCell align="right">Loan Amount</TableCell>
               <TableCell align="right">Loan Taken Date</TableCell>
+              <TableCell align="right">Loan Closed Date</TableCell>
               <TableCell align="right">Total Time Elapsed</TableCell>
               <TableCell align="right">R O I</TableCell>
               <TableCell align="right">Monthly Interest</TableCell>
@@ -133,6 +140,7 @@ export default function CustomTable() {
             <TableRow>
               <TableCell>Total</TableCell>
               <TableCell align="right">{totalPrincipalAccumulated}</TableCell>
+              <TableCell></TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
               <TableCell align="right"></TableCell>
@@ -176,6 +184,7 @@ export default function CustomTable() {
                         <TableCell>Name</TableCell>
                         <TableCell align="right">Loan Amount</TableCell>
                         <TableCell align="right">Loan Taken Date</TableCell>
+                        <TableCell align="right">Loan Closed Date</TableCell>
                         <TableCell align="right">Total Time Elapsed</TableCell>
                         <TableCell align="right">R O I</TableCell>
                         <TableCell align="right">Monthly Interest</TableCell>
@@ -228,6 +237,11 @@ export default function CustomTable() {
                               {loan.loanTakenDate.toDateString()}
                             </TableCell>
                             <TableCell align="right">
+                              {loan.loanClosedDate
+                                ? loan.loanClosedDate.toDateString()
+                                : "N/A"}
+                            </TableCell>
+                            <TableCell align="right">
                               {getTimeElapsed(loan.loanTakenDate)}
                             </TableCell>
                             <TableCell align="right">{loan.roi}</TableCell>
@@ -254,6 +268,7 @@ export default function CustomTable() {
                         <TableCell align="right">
                           {totalPrincipalAccumulated2}
                         </TableCell>
+                        <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell></TableCell>
                         <TableCell align="right"></TableCell>
