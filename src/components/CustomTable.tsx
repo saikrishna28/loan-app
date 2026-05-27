@@ -30,36 +30,37 @@ export default function CustomTable() {
     navigate("/details", { state: row });
   };
 
-  const tableData = extendedLoanData.map((row) => {
-    const monthlyInterest = calculateMonthlyInterest(
-      row.loanAmt,
-      row.roi,
-      row.loanTakenDate,
-    );
-    const totalInterest = calculateAccumulatedInterest(
-      row.loanAmt,
-      row.roi,
-      row.loanTakenDate,
-      row.loanClosedDate,
-    );
-    const interestPending = row.borrower.includes("Chinna")
-      ? totalInterest - row.interestPaid - 1000
-      : totalInterest - row.interestPaid;
-    const totalAmount = !!row.loanClosedDate
-      ? interestPending
-      : row.loanAmt + interestPending;
-    totalPendingInterest += interestPending;
-    totalPrincipalAccumulated += row.loanAmt;
-    monthlyInterestAccumulated += monthlyInterest;
-    totalInterestAccumulated += totalInterest;
-    totalAmountAccumulated += totalAmount;
-    row.monthlyInterest = monthlyInterest;
-    row.totalInterest = totalInterest;
-    row.interestPending = interestPending;
-    row.totalPending = totalAmount;
-    updatedExtendedLoanData.push(row);
-    return (
-      !row.loanClosedDate && (
+  const tableData = extendedLoanData
+    .filter((row) => !row.loanClosedDate)
+    .map((row) => {
+      const monthlyInterest = calculateMonthlyInterest(
+        row.loanAmt,
+        row.roi,
+        row.loanTakenDate,
+      );
+      const totalInterest = calculateAccumulatedInterest(
+        row.loanAmt,
+        row.roi,
+        row.loanTakenDate,
+        row.loanClosedDate,
+      );
+      const interestPending = row.borrower.includes("Chinna")
+        ? totalInterest - row.interestPaid - 1000
+        : totalInterest - row.interestPaid;
+      const totalAmount = !!row.loanClosedDate
+        ? interestPending
+        : row.loanAmt + interestPending;
+      totalPendingInterest += interestPending;
+      totalPrincipalAccumulated += row.loanAmt;
+      monthlyInterestAccumulated += monthlyInterest;
+      totalInterestAccumulated += totalInterest;
+      totalAmountAccumulated += totalAmount;
+      row.monthlyInterest = monthlyInterest;
+      row.totalInterest = totalInterest;
+      row.interestPending = interestPending;
+      row.totalPending = totalAmount;
+      updatedExtendedLoanData.push(row);
+      return (
         <TableRow
           key={row.borrower + row.loanTakenDate.toDateString()}
           sx={{
@@ -105,9 +106,8 @@ export default function CustomTable() {
           <TableCell align="right">{interestPending.toFixed(2)}</TableCell>
           <TableCell align="right">{totalAmount.toFixed(2)}</TableCell>
         </TableRow>
-      )
-    );
-  });
+      );
+    });
   console.log("updatedExtendedLoanData:", updatedExtendedLoanData);
   const lendersData: Record<string, ExtendedLoanData[]> =
     extendedLoanData.reduce(

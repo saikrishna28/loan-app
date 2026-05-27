@@ -90,76 +90,82 @@ export default function IndividualClosedLendings() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {loans.map((loan) => {
-                      totalPrincipalAccumulated2 += loan.loanAmt;
-                      totalMonthlyInterestAccumulated +=
-                        loan.monthlyInterest || 0;
-                      totalInterestAccumulated += loan.totalInterest || 0;
-                      totalPendingInterest += loan.interestPending || 0;
-                      totalAmountAccumulated += loan.totalPending || 0;
-                      return (
-                        loan.loanClosedDate && (
-                          <TableRow
-                            key={loan.borrower + loan.loanAmt}
-                            sx={{
-                              "&:last-child td, &:last-child th": { border: 0 },
-                              "&:nth-of-type(odd)": {
-                                backgroundColor: "#f5f5f5",
-                              },
-                              "&:nth-of-type(even)": {
-                                backgroundColor: "#ffffff",
-                              },
-                            }}
-                          >
-                            <TableCell>
-                              <div
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "space-between",
-                                  alignItems: "center",
-                                }}
-                              >
-                                <span style={{ cursor: "pointer" }}>
-                                  {loan.borrower}
-                                </span>
-                                <BiSpreadsheet
-                                  style={{ fontSize: "x-large" }}
-                                  onClick={() => showDetails(loan)}
-                                />
-                              </div>
-                            </TableCell>
-                            <TableCell align="right">{loan.loanAmt}</TableCell>
-                            <TableCell align="right">
-                              {loan.loanTakenDate.toDateString()}
-                            </TableCell>
-                            <TableCell align="right">
-                              {loan.loanClosedDate
-                                ? loan.loanClosedDate.toDateString()
-                                : "N/A"}
-                            </TableCell>
-                            <TableCell align="right">
-                              {getTimeElapsed(loan.loanTakenDate)}
-                            </TableCell>
-                            <TableCell align="right">{loan.roi}</TableCell>
-                            <TableCell align="right">
-                              {loan.monthlyInterest?.toFixed(2)}
-                            </TableCell>
-                            <TableCell align="right">
-                              {loan.totalInterest?.toFixed(2)}
-                            </TableCell>
-                            <TableCell align="right">
-                              {loan.interestPaid}
-                            </TableCell>
-                            <TableCell align="right">
-                              {loan.interestPending?.toFixed(2)}
-                            </TableCell>
-                            <TableCell align="right">
-                              {loan.totalPending?.toFixed(2)}
-                            </TableCell>
-                          </TableRow>
-                        )
-                      );
-                    })}
+                    {loans
+                      .filter((loan) => !!loan.loanClosedDate)
+                      .map((loan) => {
+                        totalPrincipalAccumulated2 += loan.loanAmt;
+                        totalMonthlyInterestAccumulated +=
+                          loan.monthlyInterest || 0;
+                        totalInterestAccumulated += loan.totalInterest || 0;
+                        totalPendingInterest += loan.interestPending || 0;
+                        totalAmountAccumulated += loan.totalPending || 0;
+                        return (
+                          loan.loanClosedDate && (
+                            <TableRow
+                              key={loan.borrower + loan.loanAmt}
+                              sx={{
+                                "&:last-child td, &:last-child th": {
+                                  border: 0,
+                                },
+                                "&:nth-of-type(odd)": {
+                                  backgroundColor: "#f5f5f5",
+                                },
+                                "&:nth-of-type(even)": {
+                                  backgroundColor: "#ffffff",
+                                },
+                              }}
+                            >
+                              <TableCell>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    alignItems: "center",
+                                  }}
+                                >
+                                  <span style={{ cursor: "pointer" }}>
+                                    {loan.borrower}
+                                  </span>
+                                  <BiSpreadsheet
+                                    style={{ fontSize: "x-large" }}
+                                    onClick={() => showDetails(loan)}
+                                  />
+                                </div>
+                              </TableCell>
+                              <TableCell align="right">
+                                {loan.loanAmt}
+                              </TableCell>
+                              <TableCell align="right">
+                                {loan.loanTakenDate.toDateString()}
+                              </TableCell>
+                              <TableCell align="right">
+                                {loan.loanClosedDate
+                                  ? loan.loanClosedDate.toDateString()
+                                  : "N/A"}
+                              </TableCell>
+                              <TableCell align="right">
+                                {getTimeElapsed(loan.loanTakenDate)}
+                              </TableCell>
+                              <TableCell align="right">{loan.roi}</TableCell>
+                              <TableCell align="right">
+                                {loan.monthlyInterest?.toFixed(2)}
+                              </TableCell>
+                              <TableCell align="right">
+                                {loan.totalInterest?.toFixed(2)}
+                              </TableCell>
+                              <TableCell align="right">
+                                {loan.interestPaid}
+                              </TableCell>
+                              <TableCell align="right">
+                                {loan.interestPending?.toFixed(2)}
+                              </TableCell>
+                              <TableCell align="right">
+                                {loan.totalPending?.toFixed(2)}
+                              </TableCell>
+                            </TableRow>
+                          )
+                        );
+                      })}
                     <TableRow>
                       <TableCell>Total</TableCell>
                       <TableCell align="right">

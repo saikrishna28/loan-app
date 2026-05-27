@@ -13,9 +13,11 @@ import { DatePicker } from "@mui/x-date-pickers";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
+import Header from "../components/Header";
 
 export default function ShowDetails() {
   const location = useLocation();
+  const username = localStorage.getItem("username") || "";
   const extLoanData = location.state as ExtendedLoanData | undefined;
   const [compoundingValue, setCompoundingValue] = useState(0);
   const [compoundingDaily, setCompoundingDaily] = useState(false);
@@ -87,107 +89,110 @@ export default function ShowDetails() {
   };
 
   return (
-    <div style={{ padding: "2rem" }}>
-      <div
-        style={{
-          paddingBottom: "1rem",
-          textAlign: "justify",
-          paddingLeft: "1rem",
-          marginBottom: "1rem",
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <BiSolidChevronLeft />
-        <span
-          style={{ cursor: "pointer", fontWeight: "bold" }}
-          onMouseEnter={(e: any) => {
-            const el = e.currentTarget as HTMLSpanElement;
-            el.style.color = "blue";
-            el.style.textDecoration = "underline";
-          }}
-          onMouseLeave={(e: any) => {
-            const el = e.currentTarget as HTMLSpanElement;
-            el.style.color = "";
-            el.style.textDecoration = "none";
-          }}
-          onClick={() => {
-            window.history.back();
+    <>
+      <Header title="Loan Summary" username={username} />
+      <div style={{ padding: "2rem" }}>
+        <div
+          style={{
+            paddingBottom: "1rem",
+            textAlign: "justify",
+            paddingLeft: "1rem",
+            marginBottom: "1rem",
+            display: "flex",
+            alignItems: "center",
           }}
         >
-          HOME
-        </span>
-      </div>
-      <div>{fields}</div>
-      <div style={{ marginTop: "2rem", fontStyle: "italic", color: "#555" }}>
-        <h2>Calculate Loan</h2>
-        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              label="From Date"
-              value={fromDate}
-              onChange={(newValue) => setFromDate(newValue)}
-            />
-            <DatePicker
-              label="To Date"
-              value={toDate}
-              onChange={(newValue) => setToDate(newValue)}
-            />
-          </LocalizationProvider>
-          <TextField
-            label="ROI"
-            type="number"
-            value={modifiedROI}
-            onChange={(e) => setModifiedROI(Number(e.target.value))}
-          />
-          <Button variant="contained" onClick={calculateLoan}>
-            Calculate
-          </Button>
-        </div>
-        <br></br>
-      </div>
-      {totalPayable !== 0 && (
-        <div>
-          <span style={{ fontSize: "large", fontWeight: "bold" }}>
-            Total Payable is : ₹ {totalPayable.toFixed(2)}
+          <BiSolidChevronLeft />
+          <span
+            style={{ cursor: "pointer", fontWeight: "bold" }}
+            onMouseEnter={(e: any) => {
+              const el = e.currentTarget as HTMLSpanElement;
+              el.style.color = "blue";
+              el.style.textDecoration = "underline";
+            }}
+            onMouseLeave={(e: any) => {
+              const el = e.currentTarget as HTMLSpanElement;
+              el.style.color = "";
+              el.style.textDecoration = "none";
+            }}
+            onClick={() => {
+              window.history.back();
+            }}
+          >
+            HOME
           </span>
         </div>
-      )}
-      <br />
-      <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
-        <TextField
-          label="Coumpounding for every n months"
-          type="number"
-          disabled={compoundingDaily}
-          value={compoundingValue}
-          onChange={(e) => setCompoundingValue(Number(e.target.value))}
-        />
-        <FormGroup>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={compoundingDaily}
-                onChange={(e) => {
-                  setCompoundingDaily(e.target.checked);
-                  setTotalCompPayable(0);
-                  if (e.target.checked) {
-                    setCompoundingValue(0);
-                  }
-                }}
+        <div>{fields}</div>
+        <div style={{ marginTop: "2rem", fontStyle: "italic", color: "#555" }}>
+          <h2>Calculate Loan</h2>
+          <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="From Date"
+                value={fromDate}
+                onChange={(newValue) => setFromDate(newValue)}
               />
-            }
-            label="Coumpound daily"
-            onChange={(e) => console.log(e.target)}
-          />
-        </FormGroup>
-      </div>
-      {totalCompPayable !== 0 && (
-        <div>
-          <span style={{ fontSize: "large", fontWeight: "bold" }}>
-            Total Payable is : ₹ {totalCompPayable.toFixed(2)}
-          </span>
+              <DatePicker
+                label="To Date"
+                value={toDate}
+                onChange={(newValue) => setToDate(newValue)}
+              />
+            </LocalizationProvider>
+            <TextField
+              label="ROI"
+              type="number"
+              value={modifiedROI}
+              onChange={(e) => setModifiedROI(Number(e.target.value))}
+            />
+            <Button variant="contained" onClick={calculateLoan}>
+              Calculate
+            </Button>
+          </div>
+          <br></br>
         </div>
-      )}
-    </div>
+        {totalPayable !== 0 && (
+          <div>
+            <span style={{ fontSize: "large", fontWeight: "bold" }}>
+              Total Payable is : ₹ {totalPayable.toFixed(2)}
+            </span>
+          </div>
+        )}
+        <br />
+        <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
+          <TextField
+            label="Coumpounding for every n months"
+            type="number"
+            disabled={compoundingDaily}
+            value={compoundingValue}
+            onChange={(e) => setCompoundingValue(Number(e.target.value))}
+          />
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={compoundingDaily}
+                  onChange={(e) => {
+                    setCompoundingDaily(e.target.checked);
+                    setTotalCompPayable(0);
+                    if (e.target.checked) {
+                      setCompoundingValue(0);
+                    }
+                  }}
+                />
+              }
+              label="Coumpound daily"
+              onChange={(e) => console.log(e.target)}
+            />
+          </FormGroup>
+        </div>
+        {totalCompPayable !== 0 && (
+          <div>
+            <span style={{ fontSize: "large", fontWeight: "bold" }}>
+              Total Payable is : ₹ {totalCompPayable.toFixed(2)}
+            </span>
+          </div>
+        )}
+      </div>
+    </>
   );
 }
